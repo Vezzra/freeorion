@@ -13,10 +13,9 @@ import MilitaryAI
 import ShipDesignAI
 
 from EnumsAI import (PriorityType, EmpireProductionTypes, MissionType, get_priority_production_types,
-                     FocusType, ShipRoleType, ShipDesignTypes)
+                     FocusType, ShipRoleType)
 from freeorion_tools import dict_from_map, ppstring, chat_human, tech_is_complete, print_error
 from TechsListsAI import EXOBOT_TECH_NAME
-from operator import itemgetter
 from print_utils import Table, Sequence, Text
 
 
@@ -35,8 +34,7 @@ def find_best_designs_this_turn():
     best_military_stats = ShipDesignAI.MilitaryShipDesigner().optimize_design()
     best_carrier_stats = ShipDesignAI.CarrierShipDesigner().optimize_design()
     best_stats = best_military_stats + best_carrier_stats
-    if best_stats:
-        best_stats.sort(key=itemgetter(0))
+    best_stats.sort(reverse=True)
     design_cache[PriorityType.PRODUCTION_MILITARY] = best_stats
     design_cache[PriorityType.PRODUCTION_ORBITAL_INVASION] = ShipDesignAI.OrbitalTroopShipDesigner().optimize_design()
     design_cache[PriorityType.PRODUCTION_INVASION] = ShipDesignAI.StandardTroopShipDesigner().optimize_design()

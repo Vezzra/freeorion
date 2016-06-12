@@ -247,8 +247,8 @@ def merge_fleet_a_into_b(fleet_a_id, fleet_b_id, leave_rating=0, need_rating=0, 
         if transferred:
             transferred_rating = CombatRatingsAI.combine_ratings(transferred_rating, this_rating)
         else:
-            print "  *** attempted transfer of ship %4d, formerly of fleet %4d, into fleet %4d with result %d; %s" % (
-                ship_id, fleet_a_id, fleet_b_id, transferred, [" context is %s" % context, ""][context == ""])
+            print "  *** transfer of ship %4d, formerly of fleet %4d, into fleet %4d failed; %s" % (
+                ship_id, fleet_a_id, fleet_b_id, [" context is %s" % context, ""][context == ""])
         if need_rating != 0 and need_rating <= transferred_rating:
             break
     fleet_a = universe.getFleet(fleet_a_id)

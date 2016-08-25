@@ -63,4 +63,23 @@ def execute_turn_events():
                 if monster == fo.invalid_object():
                     print >> sys.stderr, "Turn events: unable to create monster in fleet"
 
+    # Check system orbits
+    print "########## System Orbit Check ##########"
+    u = fo.get_universe()
+    systems = u.systemIDs
+    for s in systems:
+        print "Checking system %s" % fo.get_name(s)
+        planets = fo.sys_get_planets(s)
+        orbits = ["--" for _ in range(fo.sys_get_num_orbits(s))]
+        planets_without_orbit = []
+        for p in planets:
+            o = fo.sys_orbit_of_planet(s, p)
+            if o >= 0:
+                orbits[o] = fo.get_name(p)
+        for o in range(len(orbits)):
+            print "Orbit %d: %s" % (o, orbits[o])
+        if planets_without_orbit:
+            print "ERROR: Planets without orbit:", planets_without_orbit
+    print "########## System Orbit Check ##########"
+
     return True

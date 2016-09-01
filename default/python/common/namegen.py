@@ -138,18 +138,20 @@ def get_syllable(start=False, end=False, dont_start_with=list()):
     return retval
 
 
-names = []
-
-for _ in range(100):
+def get_name(max_syllables=2, dont_start_with=list(), dont_end_with=list()):
     middle_syllables = []
-    first_letter = get_syllable(start=True, dont_start_with=["ck"])
+    first_letter = get_syllable(start=True, dont_start_with=dont_start_with)
     last_letter = first_letter[-1]
-    for _ in range(randint(1, 2)):
+    for _ in range(randint(1, max_syllables)):
         syl = get_syllable(dont_start_with=[last_letter])
         middle_syllables.extend(syl)
         last_letter = syl[-1]
-    last_letter = get_syllable(end=True, dont_start_with=[last_letter] + ["qu", "sp", "st"])
-    names.append("".join(first_letter + middle_syllables + last_letter).capitalize())
+    last_letter = get_syllable(end=True, dont_start_with=[last_letter] + dont_end_with)
+    return "".join(first_letter + middle_syllables + last_letter).capitalize()
 
+
+names = []
+for _ in range(10):
+    names.append(get_name(2, ["ck"], ["qu", "sp", "st"]))
 names.sort()
 print "\n".join(names)

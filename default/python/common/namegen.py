@@ -148,7 +148,7 @@ for _ in range(100):
         syl = get_syllable(dont_start_with=[last_letter])
         middle_syllables.extend(syl)
         last_letter = syl[-1]
-    last_letter = get_syllable(end=True, dont_start_with=[last_letter] + ["qu"])
+    last_letter = get_syllable(end=True, dont_start_with=[last_letter] + ["qu", "sp", "st"])
     names.append("".join(first_letter + middle_syllables + last_letter).capitalize())
 
 names.sort()

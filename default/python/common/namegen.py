@@ -12,12 +12,12 @@ class SingleLetter(object):
 
 class LetterGroup(SingleLetter):
     def __init__(self, *args):
-        self.letters = list(args)
+        self.__letters__ = list(args)
 
     def __call__(self, *args, **kwargs):
         exclude = kwargs.get("exclude", [])
         while True:
-            letter = choice(self.letters)()
+            letter = choice(self.__letters__)()
             if letter not in exclude:
                 return letter
 

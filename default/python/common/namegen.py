@@ -142,7 +142,7 @@ names = []
 
 for _ in range(100):
     middle_syllables = []
-    first_letter = get_syllable(start=True)
+    first_letter = get_syllable(start=True, dont_start_with=["ck"])
     last_letter = first_letter
     for _ in range(randint(1, 2)):
         syl = get_syllable(dont_start_with=[last_letter])

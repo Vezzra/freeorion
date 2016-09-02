@@ -134,39 +134,49 @@ consonants = LetterGroup(
 )
 
 
-def get_syllable(start=False, end=False, dont_start_with=list()):
-    retval = []
-    if (start and not end) or (not start and end):
-        retval.append(consonants.pick(exclude=dont_start_with) if random() < 0.6
-                      else vowels.pick(exclude=dont_start_with))
+def pick_syllable(dont_start_with=list()):
+    syllable = []
+    if random() < 0.6:
+        letter = consonants.pick(exclude=dont_start_with)
+        syllable.append(letter)
+        letter = vowels.pick(exclude=[letter])
+        syllable.append(letter)
+        letter = consonants.pick(exclude=[letter])
+        syllable.append(letter)
     else:
-        if random() < 0.6:
-            letter = consonants.pick(exclude=dont_start_with)
-            retval.append(letter)
-            letter = vowels.pick(exclude=[letter])
-            retval.append(letter)
-            letter = consonants.pick(exclude=[letter])
-            retval.append(letter)
-        else:
-            letter = vowels.pick(exclude=dont_start_with)
-            retval.append(letter)
-            letter = consonants.pick(exclude=[letter])
-            retval.append(letter)
-            letter = vowels.pick(exclude=[letter])
-            retval.append(letter)
-    return retval
+        letter = vowels.pick(exclude=dont_start_with)
+        syllable.append(letter)
+        letter = consonants.pick(exclude=[letter])
+        syllable.append(letter)
+        letter = vowels.pick(exclude=[letter])
+        syllable.append(letter)
+    return syllable
+
+
+def pick_single_letter(exclude_letters=None, exclude_group_containing=None):
+    if exclude_group_containing in consonants.get():
+        letter_group = vowels
+    elif exclude_group_containing in vowels.get():
+        letter_group = consonants
+    else:
+        letter_group = consonants if random() < 0.6 else vowels
+    return [letter_group.pick(exclude_letters)]
+
 
 
 def get_name(max_syllables=2, dont_start_with=list(), dont_end_with=list()):
-    middle_syllables = []
-    first_letter = get_syllable(start=True, dont_start_with=dont_start_with)
-    last_letter = first_letter[-1]
+    middle_letters = []
+    last_letter = ""
+
     for _ in range(randint(1, max_syllables)):
-        syl = get_syllable(dont_start_with=[last_letter])
-        middle_syllables.extend(syl)
-        last_letter = syl[-1]
-    last_letter = get_syllable(end=True, dont_start_with=[last_letter] + dont_end_with)
-    return "".join(first_letter + middle_syllables + last_letter).capitalize()
+        syllable = pick_syllable(dont_start_with=[last_letter])
+        middle_letters.extend(syllable)
+        last_letter = syllable[-1]
+
+    first_letter = pick_single_letter(dont_start_with, middle_letters[0])
+    last_letter = pick_single_letter(dont_end_with, middle_letters[-1])
+
+    return "".join(first_letter + middle_letters + last_letter).capitalize()
 
 
 names = []

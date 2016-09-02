@@ -179,8 +179,9 @@ def get_name(max_syllables=2, dont_start_with=list(), dont_end_with=list()):
     return "".join(first_letter + middle_letters + last_letter).capitalize()
 
 
-names = []
-for _ in range(10):
-    names.append(get_name(2, ["ck"], ["qu", "sp", "st"]))
-names.sort()
-print "\n".join(names)
+if __name__ == "__main__":
+    names = []
+    for _ in range(10):
+        names.append(get_name(2, ["ck"], ["qu", "sp", "st"]))
+    names.sort()
+    print "\n".join(names)

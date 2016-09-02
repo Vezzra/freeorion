@@ -2,24 +2,42 @@ import sys
 from random import choice, random, randint
 
 
-class SingleLetter(object):
+class LetterContainer(object):
+    def pick(self, exclude=None):
+        raise NotImplementedError
+
+    def get(self):
+        raise NotImplementedError
+
+
+class SingleLetter(LetterContainer):
     def __init__(self, letter):
         self.__letter__ = letter
 
-    def __call__(self, *args, **kwargs):
+    def pick(self, exclude=None):
         return self.__letter__
 
+    def get(self):
+        return [self.__letter__]
 
-class LetterGroup(SingleLetter):
+
+class LetterGroup(LetterContainer):
     def __init__(self, *args):
         self.__letters__ = list(args)
 
-    def __call__(self, *args, **kwargs):
-        exclude = kwargs.get("exclude", [])
+    def pick(self, exclude=None):
+        if not exclude:
+            exclude=[]
         while True:
-            letter = choice(self.__letters__)()
+            letter = choice(self.__letters__).pick()
             if letter not in exclude:
                 return letter
+
+    def get(self):
+        letter_list = []
+        for l in self.__letters__:
+            letter_list.extend(l.get())
+        return letter_list
 
 
 lg_a = LetterGroup(
@@ -119,21 +137,22 @@ consonants = LetterGroup(
 def get_syllable(start=False, end=False, dont_start_with=list()):
     retval = []
     if (start and not end) or (not start and end):
-        retval.append(consonants(exclude=dont_start_with) if random() < 0.6 else vowels(exclude=dont_start_with))
+        retval.append(consonants.pick(exclude=dont_start_with) if random() < 0.6
+                      else vowels.pick(exclude=dont_start_with))
     else:
         if random() < 0.6:
-            letter = consonants(exclude=dont_start_with)
+            letter = consonants.pick(exclude=dont_start_with)
             retval.append(letter)
-            letter = vowels(exlude=[letter])
+            letter = vowels.pick(exclude=[letter])
             retval.append(letter)
-            letter = consonants(exlude=[letter])
+            letter = consonants.pick(exclude=[letter])
             retval.append(letter)
         else:
-            letter = vowels(exclude=dont_start_with)
+            letter = vowels.pick(exclude=dont_start_with)
             retval.append(letter)
-            letter = consonants(exlude=[letter])
+            letter = consonants.pick(exclude=[letter])
             retval.append(letter)
-            letter = vowels(exlude=[letter])
+            letter = vowels.pick(exclude=[letter])
             retval.append(letter)
     return retval
 

@@ -126,7 +126,7 @@ def get_syllable(start=False, end=False, dont_start_with=list()):
             retval.append(letter)
             letter = vowels(exlude=[letter])
             retval.append(letter)
-            letter = consonants(exlude=[letter]+["qu", "q"])
+            letter = consonants(exlude=[letter])
             retval.append(letter)
         else:
             letter = vowels(exclude=dont_start_with)

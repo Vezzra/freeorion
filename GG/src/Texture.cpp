@@ -35,8 +35,10 @@
 #endif
 #include <boost/algorithm/string/case_conv.hpp>
 
+// Starting with boost 1.68 boost::gil integrates support for grayscale-alpha
+// png images, so prefer their implementation instead of our hacky gilext code.
 #if GG_HAVE_LIBPNG
-# if GIGI_CONFIG_USE_OLD_IMPLEMENTATION_OF_GIL_PNG_IO
+# if BOOST_VERSION < 106800
 #  include "gilext/io/png_dynamic_io.hpp"
 #  include "gilext/io/png_io_v2_compat.hpp"
 # else

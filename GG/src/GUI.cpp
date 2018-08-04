@@ -36,8 +36,10 @@
 #include <GG/utf8/checked.h>
 #include <GG/ZList.h>
 
+// Starting with boost 1.68 boost::gil integrates support for grayscale-alpha
+// png images, so prefer their implementation instead of our hacky gilext code.
 #if GG_HAVE_LIBPNG
-# if GIGI_CONFIG_USE_OLD_IMPLEMENTATION_OF_GIL_PNG_IO
+# if BOOST_VERSION < 106800
 #  if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 7)
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wunused-local-typedefs"
